@@ -1,0 +1,141 @@
+service: enterprise-data-engineering-lambdas
+
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: python3.12
+  memorySize: 512
+  timeout: 30
+  region: ${opt:region, 'us-west-2'}
+  stage: ${opt:stage, 'dev'}
+  stackName: enterprise-data-${self:provider.stage}-stack
+  versionFunctions: true
+  environment:
+    STAGE: ${self:provider.stage}
+    REGION: ${self:provider.region}
+    LOG_LEVEL: INFO
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - s3:GetObject
+            - s3:PutObject
+            - s3:ListBucket
+          Resource:
+            - arn:aws:s3:::${self:custom.dataBucket}/*
+            - arn:aws:s3:::${self:custom.dataBucket}
+        - Effect: Allow
+          Action:
+            - dynamodb:PutItem
+            - dynamodb:GetItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+            - dynamodb:Query
+            - dynamodb:Scan
+          Resource:
+            - !GetAtt MetadataTable.Arn
+
+custom:
+  dataBucket: enterprise-data-${self:provider.stage}-bucket
+  pythonRequirements:
+    dockerizePip: true
+    zip: true
+    slim: true
+    noDeploy:
+      - pytest
+      - pytest-cov
+      - boto3
+      - botocore
+    useDownloadCache: true
+    useStaticCache: true
+  prune:
+    automatic: true
+    number: 3
+
+package:
+  individually: true
+  patterns:
+    - "!node_modules/**"
+    - "!venv/**"
+    - "!.venv/**"
+    - "!__pycache__/**"
+    - "!.coverage"
+    - "!.pytest_cache/**"
+    - "!tests/**"
+    - "!docs/**"
+
+functions:
+  hello_world:
+    handler: hello_world.handler
+    description: Example Lambda function
+    events:
+      - http:
+          path: hello
+          method: get
+          cors: true
+          authorizer:
+            type: AWS_IAM
+      - schedule:
+          rate: rate(1 day)
+          enabled: true
+    environment:
+      EXTRA_VAR: example-value
+
+  data_processor:
+    handler: data_processor.handler
+    description: Processes data from S3 and stores metadata in DynamoDB
+    events:
+      - s3:
+          bucket: ${self:custom.dataBucket}
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: incoming/
+            - suffix: .csv
+    environment:
+      METADATA_TABLE: !Ref MetadataTable
+
+resources:
+  Resources:
+    MetadataTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: metadata-${self:provider.stage}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+          - AttributeName: timestamp
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+          - AttributeName: timestamp
+            KeyType: RANGE
+        PointInTimeRecoverySpecification:
+          PointInTimeRecoveryEnabled: true
+
+    DataBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:custom.dataBucket}
+        VersioningConfiguration:
+          Status: Enabled
+        BucketEncryption:
+          ServerSideEncryptionConfiguration:
+            - ServerSideEncryptionByDefault:
+                SSEAlgorithm: AES256
+        LifecycleConfiguration:
+          Rules:
+            - Id: TransitionToGlacier
+              Status: Enabled
+              Prefix: archive/
+              Transitions:
+                - TransitionInDays: 90
+                  StorageClass: GLACIER
+
+plugins:
+  - serverless-python-requirements
+  - serverless-iam-roles-per-function
+  - serverless-prune-plugin

@@ -1,0 +1,28 @@
+root = true
+
+# Default settings for all files
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+max_line_length = 100
+
+# Python files
+[*.py]
+indent_size = 4
+max_line_length = 88  # Black default
+
+# Infrastructure code
+[*.{tf,tfvars,hcl}]
+indent_size = 2
+
+# Web and config files
+[*.{json,yaml,yml,toml}]
+indent_size = 2
+
+# Markdown files
+[*.md]
+trim_trailing_whitespace = false  # Allow trailing spaces for line breaks

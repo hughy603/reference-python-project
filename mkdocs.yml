@@ -1,0 +1,124 @@
+site_name: Enterprise Data Engineering Reference Project
+site_description: A comprehensive Python and AWS reference project for enterprise data engineering
+site_author: Enterprise Data Engineering Team
+site_url: https://github.com/example/enterprise-data-engineering
+
+repo_name: example/enterprise-data-engineering
+repo_url: https://github.com/example/enterprise-data-engineering
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  logo: assets/images/company-logo.svg
+  favicon: assets/images/company-logo.svg
+  palette:
+    # Company brand colors
+    primary: custom
+    accent: custom
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.highlight
+    - search.suggest
+    - content.code.copy
+  icon:
+    repo: fontawesome/brands/github
+  # Custom company styling
+  custom_dir: docs/overrides
+  # Add custom stylesheet
+  extra_css:
+    - assets/stylesheets/extra.css
+
+plugins:
+  - search
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          paths: [src]
+          options:
+            docstring_style: google
+            show_source: true
+            show_root_heading: true
+            merge_init_into_class: true
+            docstring_section_style: spacy
+            members_order: source
+            show_if_no_docstring: false
+            show_signature_annotations: true
+            separate_signature: true
+            signature_crossrefs: true
+            unwrap_annotated: true
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - codehilite
+  - footnotes
+  - meta
+  - pymdownx.arithmatex
+  - pymdownx.betterem
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: "material.extensions.emoji.twemoji"
+      emoji_generator: "material.extensions.emoji.to_svg"
+  - pymdownx.highlight:
+      use_pygments: true
+      linenums: true
+      auto_title: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.magiclink
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: "pymdownx.superfences.fence_code_format"
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+  - toc:
+      permalink: true
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/example
+  generator: false
+  copyright: "© 2024 The company"
+
+nav:
+  - Home: index.md
+  - Getting Started:
+      - Installation: getting-started/installation.md
+      - Configuration: getting-started/configuration.md
+      - Quick Start: getting-started/quick-start.md
+  - User Guide:
+      - Package Structure: user-guide/package-structure.md
+      - CLI Usage: user-guide/cli-usage.md
+      - Data Pipeline: user-guide/data-pipeline.md
+      - AWS Integration: user-guide/aws-integration.md
+  - Infrastructure:
+      - Terraform: infrastructure/terraform.md
+      - CloudFormation: infrastructure/cloudformation.md
+  - Examples:
+      - AWS Examples: examples/aws-examples.md
+      - Spark Examples: examples/spark-examples.md
+  - Development:
+      - Contributing: development/contributing.md
+      - Testing: development/testing.md
+      - Documentation: development/documentation.md
+      - Pre-commit: pre-commit.md
+      - Automation: automation.md
+      - VS Code Integration: vscode_integration.md
+  - API Reference:
+      - Enterprise Data Engineering: api/enterprise_data_engineering.md
+      - Reference Python Project: api/reference_python_project.md

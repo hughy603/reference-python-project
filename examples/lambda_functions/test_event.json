@@ -1,0 +1,16 @@
+{
+    "name": "AWS Developer",
+    "requestContext": {
+        "requestId": "test-request-123",
+        "timeEpoch": 1631234567890
+    },
+    "queryStringParameters": {
+        "param1": "value1",
+        "param2": "value2"
+    },
+    "headers": {
+        "Content-Type": "application/json",
+        "User-Agent": "Test Client"
+    },
+    "body": "{\"key1\":\"value1\",\"key2\":\"value2\"}"
+}

@@ -1,0 +1,342 @@
+[build-system]
+requires = ["hatchling>=1.18.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "enterprise-data-engineering"
+version = "0.1.0"
+description = "Enterprise Data Engineering Reference Project"
+authors = [
+    { name = "Enterprise Data Engineering Team", email = "data-engineering@example.com" },
+]
+readme = "README.md"
+requires-python = ">=3.11"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+dependencies = [
+    "boto3>=1.34.0",
+    "pandas>=2.2.0",
+    "pyarrow>=15.0.0",
+    "pydantic>=2.6.1",
+    "pyyaml>=6.0.1",
+    "rich>=13.7.0",
+    "typer>=0.9.0",
+    "structlog>=24.1.0",
+    "typing-extensions>=4.9.0", # For backporting Python 3.12 features
+]
+
+[project.optional-dependencies]
+dev = [
+    "pre-commit>=3.6.0",
+    "ruff>=0.3.0",
+    "build>=1.0.3",
+    "ipython>=8.18.1",
+    "pip-audit>=2.6.1",
+    "pyright>=1.1.350",
+    "mypy>=1.8.0",
+    "tox>=4.11.3",
+    "pyupgrade>=3.15.0",
+    "bandit>=1.7.5",
+    "radon>=6.0.1",
+    # Include test dependencies
+    "pytest>=7.4.4",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.12.0",
+    "hypothesis>=6.98.0",
+    "pytest-xdist>=3.5.0",
+    "coverage>=7.3.2",
+    "moto>=4.2.0",
+]
+docs = [
+    "mkdocs>=1.5.3",
+    "mkdocs-material>=9.4.0",
+    "mkdocstrings[python]>=0.23.0",
+    "pymdown-extensions>=10.3.1",
+    "pygments>=2.16.1",
+]
+test = [
+    "pytest>=7.4.4",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.12.0",
+    "hypothesis>=6.98.0",
+    "pytest-xdist>=3.5.0",
+    "coverage>=7.3.2",
+    "moto>=4.2.0",
+]
+
+[project.urls]
+"Documentation" = "https://example.com/docs"
+"Source" = "https://github.com/example/enterprise-data-engineering"
+"Issue Tracker" = "https://github.com/example/enterprise-data-engineering/issues"
+
+[tool.hatch.build]
+packages = ["src/enterprise_data_engineering", "src/reference_python_project"]
+exclude = ["tests/**"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/enterprise_data_engineering", "src/reference_python_project"]
+
+[tool.hatch.envs.default]
+python = "3.12"
+dependencies = [
+    "pre-commit>=3.6.0",
+    "pytest>=7.4.4",
+    "pytest-cov>=4.1.0",
+    "ruff>=0.3.0",
+    "pyright>=1.1.350",
+    "pytest-mock>=3.12.0",
+    "hypothesis>=6.98.0",
+]
+
+[tool.hatch.envs.lint]
+detached = true
+dependencies = ["ruff>=0.3.0", "pyright>=1.1.350"]
+
+[tool.hatch.envs.lint.scripts]
+style = ["ruff check {args:.}", "ruff format --check {args:.}"]
+fmt = ["ruff check --fix {args:.}", "ruff format {args:.}"]
+type = "pyright {args:src tests}"
+all = ["fmt", "type"]
+validate = "echo 'Running linting validation'"
+
+[tool.hatch.envs.docs]
+dependencies = [
+    "mkdocs>=1.5.3",
+    "mkdocs-material>=9.4.0",
+    "mkdocstrings[python]>=0.23.0",
+    "pymdown-extensions>=10.3.1",
+    "pygments>=2.16.1",
+]
+
+[tool.hatch.envs.docs.scripts]
+build = "mkdocs build"
+serve = "mkdocs serve -a localhost:8080 {args}"
+gen-python = "python scripts/generate_api_docs.py"
+gen-terraform = "python scripts/generate_terraform_docs.py"
+generate = [
+    "python scripts/generate_api_docs.py",
+    "python scripts/generate_terraform_docs.py",
+]
+deploy = "mkdocs gh-deploy --force"
+
+[tool.hatch.envs.dev]
+dependencies = [
+    "pre-commit>=3.6.0",
+    "pytest>=7.4.4",
+    "pytest-cov>=4.1.0",
+    "ruff>=0.3.0",
+    "build>=1.0.3",
+    "ipython>=8.18.1",
+    "pip-audit>=2.6.1",
+    "pytest-xdist>=3.5.0",
+    "pyright>=1.1.350",
+    "mypy>=1.8.0",
+    "tox>=4.11.3",
+    "pyupgrade>=3.15.0",
+]
+
+[tool.hatch.envs.dev.scripts]
+lint = ["ruff check .", "pyright"]
+format = ["ruff format ."]
+test = ["pytest"]
+coverage = ["pytest --cov=src"]
+check-all = ["lint", "test"]
+tox = ["tox"]
+tox-parallel = ["tox --parallel"]
+compat = ["tox -e compat"]
+
+[tool.hatch.envs.test]
+dependencies = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.12.0",
+    "hypothesis>=6.92.0",
+    "pytest-xdist>=3.5.0",
+    "coverage>=7.3.2",
+    "moto>=4.2.0",
+]
+
+[tool.hatch.envs.test.scripts]
+run = "pytest {args:tests}"
+cov = "pytest --cov=python_modules --cov-report=term --cov-report=xml {args:tests}"
+
+[tool.ruff]
+# Enable flake8-bugbear ('B') rules.
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+]
+
+# Same as Black.
+line-length = 100
+indent-width = 4
+target-version = "py310"
+
+[tool.ruff.lint]
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+# Allow autofix for all enabled rules (when `--fix`) is provided.
+fixable = ["ALL"]
+unfixable = []
+
+# Select and ignore specific rules
+select = ["E", "F", "B", "UP", "N", "W", "I", "C4", "PT", "RUF", "SIM", "PLR"]
+ignore = [
+    "E741",    # Ambiguous variable names like I, O
+    "N818",    # Exception names without Error suffix
+    "PLR0913", # Too many arguments in function definition
+    "PLR0912", # Too many branches
+    "PLR2004", # Magic numbers
+    "B904",    # Use 'raise from' in except blocks
+    "E501",    # Line too long
+    "UP038",   # Use X | Y in isinstance instead of (X, Y)
+    "SIM102",  # Use a single if statement instead of nested if
+    "SIM117",  # Use with multiple contexts instead of nested with
+    "B008",    # Do not perform function call in argument defaults
+    "PT009",   # Use a regular assert instead of unittest-style assert
+    "PT011",   # pytest.raises is too broad
+    "N806",    # Variable in function should be lowercase
+    "N812",    # Lowercase imported as non-lowercase
+    "SIM108",  # Use ternary operator instead of if-else-block
+    "F841",    # Local variable is assigned to but never used
+    "UP007",   # Use X | Y for type annotations
+    "UP022",   # Prefer capture_output over sending stdout and stderr to PIPE
+    "RUF013",  # PEP 484 prohibits implicit Optional
+    "RUF005",  # Consider using unpacking instead of concatenation
+    "C405",    # Unnecessary list literal
+    "N804",    # First argument of a class method should be named cls
+    "B007",    # Loop control variable not used within loop body
+    "F601",    # Dictionary key literal repeated
+    "E722",    # Do not use bare except
+]
+
+# Ignore specific rules in specific files
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"] # Allow unused imports in __init__.py
+"**/examples/*" = [
+    "E741",
+    "F821",
+    "PLR0911",
+    "PLR0912",
+    "PLR0915",
+    "PLR2004",
+    "F841",
+]
+"**/tests/*" = ["F841"]
+"examples/glue_job_example.py" = ["N816"]
+"scripts/run_glue_job_local.py" = ["F401"]
+"scripts/init_project.py" = [
+    "PLR0915",
+] # Allow many statements in init_project.py
+
+[tool.ruff.lint.isort]
+known-first-party = ["reference_python_project", "enterprise_data_engineering"]
+
+[tool.ruff.lint.pep8-naming]
+# Allow camelCase variables in specific cases
+classmethod-decorators = [
+    "classmethod",
+    "validator",
+    "root_validator",
+    "property",
+]
+
+[tool.ruff.format]
+# Like Black, use double quotes for strings.
+quote-style = "double"
+
+# Like Black, indent with spaces, rather than tabs.
+indent-style = "space"
+
+# Like Black, respect magic trailing commas.
+skip-magic-trailing-comma = false
+
+# Like Black, automatically detect the appropriate line ending.
+line-ending = "auto"
+
+# Enable auto-formatting of code examples in docstrings. Markdown code
+# block syntax is "```python".
+docstring-code-format = true
+
+[tool.bandit]
+exclude_dirs = ["tests", "docs", "scripts"]
+skips = ["B104", "B311", "B101", "B404", "B603", "B607"]
+targets = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"
+addopts = "--strict-markers --cov=src --cov-report=term --cov-report=xml --cov-report=html --junitxml=junit.xml"
+markers = [
+    "integration: marks tests as integration tests (deselect with '-m \"not integration\"')",
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "aws: tests that require AWS credentials",
+]
+
+[tool.coverage.run]
+source = ["src"]
+omit = ["tests/*", "**/__init__.py", "**/conftest.py"]
+branch = true
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "pass",
+    "raise ImportError",
+]
+fail_under = 90.0
+show_missing = true
+
+[tool.pyright]
+include = ["src", "tests"]
+exclude = [
+    "**/node_modules",
+    "**/__pycache__",
+    "**/.pytest_cache",
+    "**/venv",
+    "**/.venv",
+    "**/.env",
+]
+reportMissingImports = true
+reportMissingTypeStubs = false
+pythonVersion = "3.12"
+pythonPlatform = "Windows"
+typeCheckingMode = "basic"
+useLibraryCodeForTypes = true
+
+[tool.poetry.group.dev.dependencies]
+pytest-cov = "^4.1.0"
+terraform-coverage = "^0.2.3"
+opa = "^0.24.0"
+conftest = "^0.40.0"

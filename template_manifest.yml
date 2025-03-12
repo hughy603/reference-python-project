@@ -1,0 +1,190 @@
+# Python & Terraform Project Template Manifest
+# -----------------------------------------------------------------------------
+# This manifest defines the structure of the template, including:
+#  - Available components and their dependencies
+#  - Template variables for substitution
+#  - File patterns associated with components
+#
+# The template processor uses this manifest to:
+#  1. Determine which components to include based on user selection
+#  2. Resolve dependencies between components
+#  3. Process template variables in files
+#  4. Remove unnecessary files from the project
+#
+# To add a new component:
+#  1. Add a new entry under the 'components' section
+#  2. Define the file patterns associated with the component
+#  3. Specify any dependencies on other components
+#  4. Update the initialization script to handle the new component
+
+template:
+  name: "Python & Terraform Project Template"
+  version: "1.0.0"
+  description: "A production-ready Python and Terraform project template for enterprise data engineering"
+
+# Components define modular parts of the template that can be enabled or disabled
+# Required components are always included regardless of user selection
+# Dependencies ensure that required supporting components are included
+components:
+  # Core components (always included)
+  - name: "core"
+    description: "Core Python project structure"
+    required: true
+    files:
+      - "src/*"
+      - "tests/*"
+      - "pyproject.toml"
+      - "setup.py"
+      - ".gitignore"
+      - ".editorconfig"
+
+  # Infrastructure components
+  - name: "terraform"
+    description: "Terraform infrastructure as code"
+    required: false
+    files:
+      - "infrastructure/terraform/*"
+      - ".tflint.hcl"
+      - ".terraform-docs.yml"
+      - ".terraform-lint.hcl"
+    dependencies: []
+
+  - name: "aws"
+    description: "AWS specific configurations and utilities"
+    required: false
+    files:
+      - "src/*/aws/*"
+      - "infrastructure/terraform/aws/*"
+    dependencies: []
+
+  - name: "cloudformation"
+    description: "CloudFormation templates for AWS resources"
+    required: false
+    files:
+      - "infrastructure/cloudformation/*"
+    dependencies: ["aws"]
+
+  # Development components
+  - name: "documentation"
+    description: "Project documentation with MkDocs"
+    required: false
+    files:
+      - "docs/*"
+      - "mkdocs.yml"
+    dependencies: []
+
+  - name: "testing"
+    description: "Testing framework with pytest"
+    required: false
+    files:
+      - "tests/conftest.py"
+      - "tests/test_*.py"
+      - "pytest.ini"
+      - "tox.ini"
+    dependencies: []
+
+  - name: "docker"
+    description: "Docker configuration for containerization"
+    required: false
+    files:
+      - "Dockerfile"
+      - "docker-compose.yml"
+    dependencies: []
+
+  - name: "ci_cd"
+    description: "CI/CD workflows with GitHub Actions"
+    required: false
+    files:
+      - ".github/workflows/*"
+    dependencies: []
+
+  # Feature components
+  - name: "data_pipelines"
+    description: "Data pipeline components"
+    required: false
+    files:
+      - "src/*/pipeline/*"
+      - "src/*/etl/*"
+      - "src/*/data/*"
+    dependencies: []
+
+  - name: "api"
+    description: "API development components"
+    required: false
+    files:
+      - "src/*/api/*"
+      - "src/*/rest/*"
+      - "src/*/graphql/*"
+    dependencies: []
+
+  - name: "ml"
+    description: "Machine learning components"
+    required: false
+    files:
+      - "src/*/ml/*"
+      - "src/*/models/*"
+      - "src/*/train/*"
+    dependencies: []
+
+# Variables are placeholders in files that get replaced during initialization
+# They can be referenced in template files using:
+#  - Jinja-style: {{ VARIABLE_NAME }}
+#  - Placeholder style: ___VARIABLE_NAME___
+#
+# Each variable has:
+#  - name: The variable name (used in template files)
+#  - description: What the variable represents
+#  - default: Default value if not provided by user
+#  - files: List of file patterns where the variable is used
+variables:
+  - name: "PROJECT_NAME"
+    description: "Name of the project"
+    default: "my-project"
+    files:
+      - "README.md"
+      - "pyproject.toml"
+      - "setup.py"
+
+  - name: "PACKAGE_NAME"
+    description: "Python package name (import name)"
+    default: "my_package"
+    files:
+      - "pyproject.toml"
+      - "setup.py"
+      - "src/*/__init__.py"
+
+  - name: "DESCRIPTION"
+    description: "Project description"
+    default: "A Python project built with the enterprise template"
+    files:
+      - "README.md"
+      - "pyproject.toml"
+      - "setup.py"
+
+  - name: "VERSION"
+    description: "Project version"
+    default: "0.1.0"
+    files:
+      - "pyproject.toml"
+      - "setup.py"
+
+  - name: "AUTHOR"
+    description: "Author name"
+    default: ""
+    files:
+      - "pyproject.toml"
+      - "setup.py"
+
+  - name: "AUTHOR_EMAIL"
+    description: "Author email"
+    default: ""
+    files:
+      - "pyproject.toml"
+      - "setup.py"
+
+  - name: "ORGANIZATION"
+    description: "Organization name"
+    default: ""
+    files:
+      - "pyproject.toml"
+      - "setup.py"

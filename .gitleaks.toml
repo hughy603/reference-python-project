@@ -1,0 +1,13 @@
+# Gitleaks configuration file
+# See: https://github.com/gitleaks/gitleaks/blob/master/config/gitleaks.toml for full documentation
+
+title = "Gitleaks configuration"
+
+[allowlist]
+description = "Allow list for .secrets.baseline and examples"
+paths = [".secrets.baseline", "examples/", "test_fixtures/", "tests/"]
+
+# Specific files to exclude (paths is for file paths, regexes is for file content)
+regexes = [
+    "(test|example|dummy|placeholder|sample|fake)_(key|secret|password|token)",
+]

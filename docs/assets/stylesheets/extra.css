@@ -1,0 +1,78 @@
+/* Custom styles for documentation */
+
+/* Styling for logo in navigation */
+.md-logo img {
+    border-radius: 4px;
+    padding: 4px;
+    background: white;
+}
+
+/* Add subtle animation to logo on hover */
+.md-logo:hover img {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+}
+
+/* Add company brand colors as utility classes */
+.company-blue {
+    color: #006192;
+}
+
+.company-red {
+    color: #d31145;
+}
+
+/* Style for primary buttons using company blue */
+.md-button.md-button--primary {
+    background-color: #006192;
+    border-color: #006192;
+}
+
+.md-button.md-button--primary:hover {
+    background-color: #004b73;
+    border-color: #004b73;
+}
+
+/* Add a subtle branded border to code blocks */
+.highlight {
+    border-left: 4px solid #006192;
+}
+
+/* Add a subtle branded footer */
+.md-footer {
+    background-color: #006192;
+}
+
+/* Style for admonitions using company colors */
+.md-typeset .admonition.note,
+.md-typeset details.note {
+    border-color: #006192;
+}
+
+.md-typeset .note>.admonition-title,
+.md-typeset .note>summary {
+    background-color: rgba(0, 97, 146, 0.1);
+    border-color: #006192;
+}
+
+.md-typeset .note>.admonition-title::before,
+.md-typeset .note>summary::before {
+    background-color: #006192;
+}
+
+/* Style for warning admonitions */
+.md-typeset .admonition.warning,
+.md-typeset details.warning {
+    border-color: #d31145;
+}
+
+.md-typeset .warning>.admonition-title,
+.md-typeset .warning>summary {
+    background-color: rgba(211, 17, 69, 0.1);
+    border-color: #d31145;
+}
+
+.md-typeset .warning>.admonition-title::before,
+.md-typeset .warning>summary::before {
+    background-color: #d31145;
+}

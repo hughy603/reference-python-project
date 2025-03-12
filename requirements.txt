@@ -1,0 +1,17 @@
+# This file is maintained for backward compatibility
+# For actual dependencies, see pyproject.toml
+
+# Install the package and its dependencies
+-e .
+
+# Development dependencies
+# pip install -e ".[dev]"
+
+# Documentation dependencies
+# pip install -e ".[docs]"
+
+# Testing dependencies
+# pip install -e ".[test]"
+
+# All development dependencies
+# pip install -e ".[dev,docs,test]"

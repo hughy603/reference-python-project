@@ -1,0 +1,53 @@
+# Sample configuration for Python & Terraform Project Template initialization
+# Usage: python scripts/init_project.py --config sample_config.yml
+
+# Project Information
+project_name: "sample-project"
+package_name: "sample_project"
+description: "A sample project built with the Python & Terraform template"
+author: "Your Name"
+email: "your.email@example.com"
+organization: "Your Organization"
+version: "0.1.0"
+
+# Components to include
+components:
+  # Infrastructure components
+  aws: true
+  terraform: true
+  cloudformation: false
+
+  # Development components
+  docker: true
+  documentation: true
+  testing: true
+  ci_cd: true
+
+  # Feature components
+  data_pipelines: true
+  api: false
+  ml: false
+
+# Advanced configuration
+advanced:
+  # Python version to use
+  python_version: "3.12"
+
+  # Linting settings
+  linting:
+    strict: false
+    formatting: true
+    types: true
+    security: true
+
+  # Testing settings
+  testing:
+    coverage_threshold: 80
+    use_pytest: true
+    use_tox: true
+
+  # Documentation settings
+  documentation:
+    use_mkdocs: true
+    include_api_docs: true
+    include_examples: true

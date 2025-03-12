@@ -1,0 +1,77 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    environment:
+      - AWS_PROFILE=default
+      - AWS_REGION=us-east-1
+      - PYTHONPATH=/app
+    command: python -m enterprise_data_engineering
+    ports:
+      - "8000:8000"
+    profiles:
+      - app
+
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    environment:
+      - AWS_PROFILE=default
+      - AWS_REGION=us-east-1
+      - PYTHONPATH=/app
+    command: bash
+    stdin_open: true
+    tty: true
+    profiles:
+      - dev
+
+  docs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONPATH=/app
+    command: -e docs run mkdocs serve -a 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    profiles:
+      - docs
+
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONPATH=/app
+      - AWS_ENDPOINT_URL=http://localstack:4566
+    command: -e test run pytest
+    depends_on:
+      - localstack
+    profiles:
+      - test
+
+  localstack:
+    image: localstack/localstack:latest
+    ports:
+      - "4566:4566"
+    environment:
+      - DEBUG=1
+      - SERVICES=s3,dynamodb,sns,sqs,lambda
+      - AWS_DEFAULT_REGION=us-east-1
+    volumes:
+      - ./localstack:/var/lib/localstack
+      - /var/run/docker.sock:/var/run/docker.sock
+    profiles:
+      - test

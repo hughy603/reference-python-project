@@ -1,0 +1,120 @@
+# Template Manifest for Python Project
+name: Python Project Template
+description: A template for Python projects with best practices built-in
+version: 1.0.0
+
+# Variables that can be substituted in template files
+variables:
+  - name: project_name
+    description: Name of the project (kebab-case)
+    default: my-python-project
+    required: true
+
+  - name: package_name
+    description: Name of the Python package (snake_case)
+    default: my_python_project
+    required: true
+
+  - name: description
+    description: Short description of the project
+    default: A Python project with best practices
+    required: true
+
+  - name: author
+    description: Author name
+    default: Your Name
+    required: true
+
+  - name: email
+    description: Author email
+    default: your.email@example.com
+    required: true
+
+  - name: version
+    description: Initial version
+    default: 0.1.0
+    required: true
+
+  - name: license
+    description: License type
+    default: MIT
+    options:
+      - MIT
+      - Apache-2.0
+      - GPL-3.0
+      - BSD-3-Clause
+
+  - name: python_version
+    description: Python version
+    default: "3.10"
+    options:
+      - "3.8"
+      - "3.9"
+      - "3.10"
+      - "3.11"
+      - "3.12"
+
+# Files to process
+files:
+  - source: templates/pyproject.toml
+    destination: pyproject.toml
+
+  - source: templates/README.md
+    destination: README.md
+
+  - source: templates/LICENSE
+    destination: LICENSE
+    condition: "license != ''"
+
+  - source: templates/src/__init__.py
+    destination: src/{{package_name}}/__init__.py
+
+  - source: templates/src/main.py
+    destination: src/{{package_name}}/main.py
+
+  - source: templates/tests/__init__.py
+    destination: tests/__init__.py
+
+  - source: templates/tests/test_main.py
+    destination: tests/test_{{package_name}}.py
+
+  - source: templates/.github/workflows/ci.yml
+    destination: .github/workflows/ci.yml
+
+  - source: templates/docs/index.md
+    destination: docs/index.md
+
+  - source: templates/.gitignore
+    destination: .gitignore
+
+  - source: templates/.pre-commit-config.yaml
+    destination: .pre-commit-config.yaml
+
+  - source: templates/Makefile
+    destination: Makefile
+
+  - source: templates/requirements-dev.txt
+    destination: requirements-dev.txt
+
+  - source: templates/setup.py
+    destination: setup.py
+
+# Hooks to run after template processing
+hooks:
+  - name: setup_venv
+    description: Set up a virtual environment
+    run: python -m venv .venv
+
+  - name: install_deps
+    description: Install dependencies
+    run: |
+      source .venv/bin/activate
+      pip install -e .
+      pip install -r requirements-dev.txt
+
+  - name: git_init
+    description: Initialize git repository
+    run: |
+      git init
+      git add .
+      git commit -m "Initial commit"

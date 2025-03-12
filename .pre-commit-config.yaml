@@ -1,0 +1,105 @@
+repos:
+  # Basic file checks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: check-yaml
+        exclude: ^(infrastructure/terraform/.+\.yml|infrastructure/cloudformation/.+\.(yaml|yml)|examples/lambda_functions/serverless\.yml)$
+      - id: check-json
+        exclude: ^\.vscode/(glue-settings|simple-settings)\.json$
+      - id: check-toml
+      - id: check-added-large-files
+        args: [--maxkb=1024]
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+        args: [--fix=lf]
+      - id: check-merge-conflict
+      - id: detect-private-key
+      - id: debug-statements
+
+  # Ruff for linting and formatting (faster alternative to flake8, black, isort)
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.2.1
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+        types_or: [python, pyi]
+
+  # Security scanning
+  - repo: https://github.com/pycqa/bandit
+    rev: 1.7.5
+    hooks:
+      - id: bandit
+        args: ["-c", "pyproject.toml"]
+        additional_dependencies: ["bandit[toml]"]
+        files: ^src/
+
+  # Markdown formatting
+  - repo: https://github.com/executablebooks/mdformat
+    rev: 0.7.17
+    hooks:
+      - id: mdformat
+        additional_dependencies:
+          - mdformat-gfm
+          - mdformat-frontmatter
+          - mdformat-footnote
+        args: [--wrap=100]
+        files: ^(docs|README\.md|.*\.md)$
+
+  # Secret leak detection
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.1
+    hooks:
+      - id: gitleaks
+        args: ["--config", ".gitleaks.toml"]
+        exclude: ^\.secrets\.baseline$
+        verbose: true
+
+  # Terraform linting and validation (simplified for better UX)
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.86.0
+    hooks:
+      - id: terraform_fmt
+        # Only run terraform fmt, which is safer and won't fail on incomplete configurations
+        verbose: true
+
+      - id: terraform_validate
+        # Make validation run in each subdirectory separately to handle multiple projects
+        args:
+          - --hook-config=--recursive=false
+        verbose: true
+
+      - id: terraform_tflint
+        files: ^infrastructure/terraform/
+        args:
+          - "--args=--config=__GIT_WORKING_DIR__/.tflint.hcl"
+          - "--args=--call-module-type=all"
+          - "--hook-config=--recursive=true"
+        verbose: true
+
+  # JSON schema validation (only keeping essential checks)
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.27.2
+    hooks:
+      - id: check-github-workflows
+      - id: check-dependabot
+
+# CI configuration
+ci:
+  autofix_commit_msg: "[pre-commit.ci] Auto fixes from pre-commit hooks"
+  autofix_prs: true
+  autoupdate_branch: ""
+  autoupdate_commit_msg: "[pre-commit.ci] pre-commit autoupdate"
+  autoupdate_schedule: weekly
+  # Only run essential hooks in CI for better performance
+  skip:
+    [
+      terraform_validate,
+      terraform_tflint,
+      python-coverage-check,
+      gitleaks,
+      check-jsonschema,
+    ]
+  submodules: false

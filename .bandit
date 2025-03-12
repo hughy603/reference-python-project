@@ -1,0 +1,4 @@
+[bandit]
+exclude_dirs = ["tests", "docs", "scripts", "examples"]
+skips = ["B101", "B104"]  # Skipping some low-severity checks
+targets = ["src"]
