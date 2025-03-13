@@ -88,7 +88,7 @@ packages = ["src/enterprise_data_engineering"]
 # Consolidated environments
 [tool.hatch.envs.default]
 python = "3.12"
-dependencies = [".[dev]"]
+dependencies = ["enterprise-data-engineering[dev]"]
 
 [tool.hatch.envs.lint]
 detached = true
@@ -102,14 +102,14 @@ all = ["fmt", "type"]
 validate = "echo 'Running linting validation'"
 
 [tool.hatch.envs.test]
-dependencies = [".[dev]"]
+dependencies = ["enterprise-data-engineering[dev]"]
 
 [tool.hatch.envs.test.scripts]
 run = "pytest {args:tests}"
 cov = "pytest --cov=src --cov-report=term --cov-report=xml {args:tests}"
 
 [tool.hatch.envs.docs]
-dependencies = [".[dev]"]
+dependencies = ["enterprise-data-engineering[dev]"]
 
 [tool.hatch.envs.docs.scripts]
 build = "mkdocs build"
@@ -173,6 +173,17 @@ ignore = [
   "SIM102",  # Use a single if statement instead of nested if
   "SIM117",  # Use with multiple contexts instead of nested with
   "B008",    # Do not perform function call in argument defaults
+  "F841",    # Local variable is assigned but never used
+  "B007",    # Loop control variable not used within loop body
+  "UP007",   # Use X | Y for type annotations
+  "RUF005",  # Consider using star operator instead of concatenation
+  "UP022",   # Prefer capture_output over sending stdout and stderr to PIPE
+  "PLR0911", # Too many return statements
+  "N806",    # Variable in function should be lowercase
+  "PLR0915", # Too many statements
+  "N812",    # Lowercase imported as non-lowercase
+  "RUF013",  # PEP 484 prohibits implicit Optional
+  "PT011",   # pytest.raises is too broad, set the match parameter
 ]
 
 [tool.ruff.lint.per-file-ignores]

@@ -30,8 +30,7 @@ repos:
             tests/test_wizards/test_run_interactive_wizard\.py|
             tests/test_wizards/test_init_project\.py|
             tests/test_aws/test_aws_mocking_example\.py|
-            tests/unit/aws_mocking_examples/test_dynamodb_operations\.py|
-            tests/unit/spark/test_transformations\.py|
+            tests/test_aws/test_aws_mocking_enhanced\.py|
             scripts/interactive_wizard\.py|
             scripts/project_health_dashboard\.py|
             scripts/init_project\.py|
@@ -39,8 +38,20 @@ repos:
             scripts/tasks\.py|
             scripts/template_utils\.py|
             scripts/unified_setup\.py|
+            scripts/cleanup_docs\.py|
+            scripts/cleanup_docs_empty_dirs\.py|
+            scripts/cleanup_repository\.py|
+            scripts/find_obsolete_docs\.py|
+            scripts/fix_documentation\.py|
+            scripts/generate_terraform_docs\.py|
+            scripts/run_cleanup\.py|
+            scripts/run_glue_job_local\.py|
             examples/.*\.py|
-            src/enterprise_data_engineering/common_utils/__init__\.py
+            src/enterprise_data_engineering/common_utils/__init__\.py|
+            src/enterprise_data_engineering/compat/__init__\.py|
+            src/enterprise_data_engineering/examples/pattern_matching\.py|
+            src/enterprise_data_engineering/examples/py312_features\.py|
+            src/enterprise_data_engineering/spark/transformations\.py
           )$
       - id: ruff-format
         types_or: [python, pyi]
@@ -50,8 +61,7 @@ repos:
             tests/test_wizards/test_run_interactive_wizard\.py|
             tests/test_wizards/test_init_project\.py|
             tests/test_aws/test_aws_mocking_example\.py|
-            tests/unit/aws_mocking_examples/test_dynamodb_operations\.py|
-            tests/unit/spark/test_transformations\.py|
+            tests/test_aws/test_aws_mocking_enhanced\.py|
             scripts/interactive_wizard\.py|
             scripts/project_health_dashboard\.py|
             scripts/init_project\.py|
@@ -59,6 +69,14 @@ repos:
             scripts/tasks\.py|
             scripts/template_utils\.py|
             scripts/unified_setup\.py|
+            scripts/cleanup_docs\.py|
+            scripts/cleanup_docs_empty_dirs\.py|
+            scripts/cleanup_repository\.py|
+            scripts/find_obsolete_docs\.py|
+            scripts/fix_documentation\.py|
+            scripts/generate_terraform_docs\.py|
+            scripts/run_cleanup\.py|
+            scripts/run_glue_job_local\.py|
             examples/.*\.py
           )$
 

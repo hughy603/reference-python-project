@@ -59,6 +59,24 @@ configuration.
 
 ## Next Steps
 
+1. ✅ Delete unused directories and update documentation accordingly
+   - Removed `tests/unit/` directory (consolidated into other test directories)
+   - Removed `tests/initialization/` directory (replaced by `tests/test_wizards/`)
+   - Removed `tests/data_pipelines/` directory (empty/unused)
+   - Removed references to non-existent `src/reference_python_project/` from documentation
+   - Removed unused/generated directories: `htmlcov/`, `site/`, `docs-venv/`, `.ruff_cache/`,
+     `.pytest_cache/`
+   - Removed generated files: `junit.xml`, `.coverage`, `coverage.xml`
+   - Consolidated docs/examples content into the examples directory
+1. ✅ Update documentation to reflect consolidated structure
+   - Updated README.md with current project structure
+   - Updated mkdocs.yml navigation structure
+   - Ensured consistent structure across all documentation files
+1. ✅ Remove empty directories under docs/
+   - Deleted empty directories: `docs/examples/`, `docs/infrastructure/`, `docs/user-guide/`,
+     `docs/api/`, `docs/python/`, `docs/windows/`
+   - Deleted empty directory trees: `docs/architecture/`, `docs/development/`, `docs/reference/`
+   - Created scripts for automatically identifying and cleaning up empty directories
 1. Continue to monitor for any remaining redundancies
 1. Ensure all documentation references are updated to reflect the new structure
 1. Consider further simplifications as the project evolves

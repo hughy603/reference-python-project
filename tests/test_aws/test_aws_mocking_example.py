@@ -7,19 +7,24 @@ avoid making actual AWS API calls during testing, which makes tests:
 2. Independent (no external dependencies)
 3. Consistent (tests work offline)
 4. Safe (won't accidentally modify real resources)
+
+NOTE: This file has been updated to use the generic `mock_aws` decorator instead
+of specific service decorators like `mock_s3`, `mock_dynamodb`, etc. which are
+deprecated in newer versions of moto. The `mock_aws` decorator can mock all AWS
+services in a single decorator, eliminating the need to stack multiple decorators.
 """
 
 import json
 
 import boto3
 import pytest
-from moto import mock_dynamodb, mock_s3, mock_sqs, mock_ssm
+from moto import mock_aws
 
 
 class TestS3Mocking:
     """Examples of mocking AWS S3 service."""
 
-    @mock_s3
+    @mock_aws
     def test_create_bucket_and_put_object(self):
         """Test creating an S3 bucket and adding an object."""
         # Create a connection to S3
@@ -44,7 +49,7 @@ class TestS3Mocking:
         content = json.loads(response["Body"].read().decode("utf-8"))
         assert content == object_data
 
-    @mock_s3
+    @mock_aws
     def test_s3_bucket_versioning(self):
         """Test S3 bucket versioning functionality."""
         # Create a connection to S3
@@ -87,7 +92,7 @@ class TestS3Mocking:
 class TestDynamoDBMocking:
     """Examples of mocking AWS DynamoDB service."""
 
-    @mock_dynamodb
+    @mock_aws
     def test_create_table_and_put_item(self):
         """Test creating a DynamoDB table and adding an item."""
         # Create a connection to DynamoDB
@@ -113,7 +118,7 @@ class TestDynamoDBMocking:
         response = table.get_item(Key={"id": "test-id"})
         assert response["Item"] == item
 
-    @mock_dynamodb
+    @mock_aws
     def test_dynamodb_queries_and_scans(self):
         """Test DynamoDB queries and scans."""
         # Create a connection to DynamoDB
@@ -213,7 +218,7 @@ class TestDynamoDBMocking:
 class TestSQSMocking:
     """Examples of mocking AWS SQS service."""
 
-    @mock_sqs
+    @mock_aws
     def test_create_queue_and_send_message(self):
         """Test creating an SQS queue and sending a message."""
         # Create a connection to SQS
@@ -240,7 +245,7 @@ class TestSQSMocking:
         assert len(messages) == 1
         assert messages[0].body == message_body
 
-    @mock_sqs
+    @mock_aws
     def test_sqs_batch_operations(self):
         """Test SQS batch send and receive operations."""
         # Create a connection to SQS
@@ -275,7 +280,7 @@ class TestSQSMocking:
 class TestSSMMocking:
     """Examples of mocking AWS SSM Parameter Store service."""
 
-    @mock_ssm
+    @mock_aws
     def test_put_and_get_parameter(self):
         """Test putting and getting SSM parameters."""
         # Create a connection to SSM
@@ -302,11 +307,15 @@ class TestSSMMocking:
 
         # Get the secure string parameter without decryption
         response = ssm_client.get_parameter(Name=secure_param_name, WithDecryption=False)
-        # Note: Moto doesn't actually encrypt parameters, so this
-        # doesn't behave exactly like AWS in this case
+        # Note: With mock_aws, the secure string is prefixed with "kms:KeyId:"
+        expected_value = f"kms:alias/aws/ssm:{secure_param_value}"
+        assert response["Parameter"]["Value"] == expected_value
+
+        # With decryption enabled, it should return the original value
+        response = ssm_client.get_parameter(Name=secure_param_name, WithDecryption=True)
         assert response["Parameter"]["Value"] == secure_param_value
 
-    @mock_ssm
+    @mock_aws
     def test_get_parameters_by_path(self):
         """Test getting parameters by path prefix."""
         # Create a connection to SSM
@@ -335,12 +344,20 @@ class TestSSMMocking:
         ]
 
         for param in parameters:
-            ssm_client.put_parameter(
-                Name=param["Name"],
-                Value=param["Value"],
-                Type=param["Type"],
-                KeyId=param.get("KeyId", ""),
-            )
+            # Only include KeyId parameter when it's needed for SecureString
+            if param["Type"] == "SecureString":
+                ssm_client.put_parameter(
+                    Name=param["Name"],
+                    Value=param["Value"],
+                    Type=param["Type"],
+                    KeyId=param["KeyId"],
+                )
+            else:
+                ssm_client.put_parameter(
+                    Name=param["Name"],
+                    Value=param["Value"],
+                    Type=param["Type"],
+                )
 
         # Get all dev parameters
         response = ssm_client.get_parameters_by_path(Path="/app/dev", Recursive=True)
@@ -362,8 +379,7 @@ class TestSSMMocking:
 class TestCombiningMockDecorators:
     """Examples of combining multiple mock decorators."""
 
-    @mock_s3
-    @mock_sqs
+    @mock_aws
     def test_s3_trigger_sqs(self):
         """Test simulating an S3 event triggering an SQS message."""
         # Create S3 bucket and SQS queue
@@ -416,7 +432,7 @@ class TestCombiningMockDecorators:
 @pytest.fixture
 def mock_aws_resources():
     """Fixture that sets up common mock AWS resources for tests."""
-    with mock_s3(), mock_dynamodb(), mock_sqs():
+    with mock_aws():
         # Set up S3
         s3_client = boto3.client("s3", region_name="us-east-1")
         bucket_name = "test-bucket"

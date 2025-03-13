@@ -99,24 +99,12 @@ nav:
   - Home: index.md
   - Getting Started:
       - Setup: getting-started/setup.md
-      - Configuration: getting-started/configuration.md
-  - User Guide:
-      - Package Structure: user-guide/package-structure.md
-      - CLI Usage: user-guide/cli-usage.md
-      - Data Pipeline: user-guide/data-pipeline.md
-      - AWS Integration: user-guide/aws-integration.md
-  - Infrastructure:
-      - Terraform: infrastructure/terraform.md
-      - CloudFormation: infrastructure/cloudformation.md
-  - Examples:
-      - AWS Examples: examples/aws-examples.md
-      - Spark Examples: examples/spark-examples.md
   - Development:
-      - Contributing: development/contributing.md
-      - Testing: development/testing.md
-      - Documentation: development/documentation.md
+      - Testing: testing.md
       - Pre-commit: pre-commit.md
       - Automation: automation.md
       - Development Environment: development.md
+      - Architecture: architecture.md
+      - Wizard: wizard.md
   - API Reference:
-      - Enterprise Data Engineering: api/enterprise_data_engineering.md
+      - Enterprise Data Engineering: enterprise_data_engineering.md

@@ -8,6 +8,7 @@ into the following directories:
 - `test_enterprise_data_engineering/`: Tests for the core enterprise data engineering functionality
 - `test_aws/`: Tests for AWS-related functionality, including mocking examples
 - `test_wizards/`: Tests for project initialization and wizard functionality
+- `common_utils/`: Test implementations of common utilities and helpers
 - `shared/`: Shared test fixtures, conftest.py, and other test utilities
 
 ## Running Tests

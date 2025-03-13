@@ -191,6 +191,31 @@ For Terraform:
 - Use tflint for extended linting
 - For complex modules, write example configurations
 
+### Testing Structure
+
+Tests are organized by type and module:
+
+- `tests/test_enterprise_data_engineering/` - Tests for the core package functionality
+- `tests/test_aws/` - Tests for AWS-related functionality
+- `tests/test_wizards/` - Tests for project initialization and wizards
+- `tests/common_utils/` - Tests for common utilities
+- `tests/shared/` - Shared test fixtures and helpers
+
+### Running Tests
+
+To run all tests:
+
+```bash
+hatch run test:run
+```
+
+To run a specific test directory:
+
+```bash
+pytest tests/test_aws/
+pytest tests/test_enterprise_data_engineering/test_specific_module.py
+```
+
 ## Pull Request Process
 
 1. **Create a pull request** from your branch to the `develop` branch

@@ -39,11 +39,6 @@ The project is organized into modular packages with clear separation of concerns
    - **spark**: Apache Spark integration utilities
    - **compat**: Compatibility layer for different Python versions
 
-1. **reference_python_project**: Reference implementation with examples
-
-   - **cli**: Command-line tools and examples
-   - **utils**: Utility functions and helpers
-
 ### Design Principles
 
 The template follows these architectural principles:

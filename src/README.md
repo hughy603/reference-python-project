@@ -13,11 +13,6 @@ src-layout pattern.
   - `spark/`: Apache Spark utilities and transformations
   - `examples/`: Example code and usage patterns
 
-- `reference_python_project/`: Reference implementation package
-
-  - `cli/`: Command-line interface modules
-  - `utils/`: Utility functions including Autosys integration
-
 ## Package Organization Standards
 
 The project follows these standards for package organization:

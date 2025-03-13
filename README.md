@@ -22,18 +22,62 @@ best practices for development, testing, and deployment.
 
 ## Getting Started
 
-See the [Setup Guide](./SETUP.md) for comprehensive instructions on installing and using this
-template.
+### Prerequisites
 
-Quick start:
+- Python 3.11 or higher
+- Git
+- [Hatch](https://hatch.pypa.io/latest/) - Python package manager
+
+### Installation
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/reference-python-project.git my-project
-cd my-project
+git clone https://github.com/yourusername/reference-python-project.git
+cd reference-python-project
 
-# Run the setup script
-python setup.py
+# Install hatch if not already installed
+pip install hatch
+
+# Create hatch environment and install dependencies
+hatch env create
+
+# Activate the hatch environment (interactive shell)
+hatch shell
+
+# Alternatively, you can run commands directly using hatch
+hatch run lint:style  # Run linting checks
+hatch run test:run    # Run tests
+```
+
+For more detailed setup instructions, including platform-specific guidance, see the
+[Setup Guide](./SETUP.md).
+
+### Running the CLI
+
+The project includes a CLI for common tasks:
+
+```bash
+# Using hatch to run the CLI
+hatch run python -m enterprise_data_engineering info
+
+# Or, if in a hatch shell:
+python -m enterprise_data_engineering info
+```
+
+### Development Tasks
+
+```bash
+# Format code
+hatch run lint:fmt
+
+# Run type checking
+hatch run lint:type
+
+# Run tests with coverage
+hatch run test:cov
+
+# Build and serve documentation
+hatch run docs:serve
 ```
 
 ## Project Structure
@@ -41,21 +85,23 @@ python setup.py
 ```
 reference-python-project/
 ├── docs/                 # Documentation files
+├── examples/             # Example code and configurations
 ├── infrastructure/       # Infrastructure as code (Terraform, CloudFormation)
 ├── scripts/              # Utility scripts for project management
 ├── src/                  # Source code
-│   ├── enterprise_data_engineering/  # Main package
-│   └── reference_python_project/     # Reference implementation
+│   └── enterprise_data_engineering/  # Main package
 ├── tests/                # Test suite
 │   ├── test_enterprise_data_engineering/  # Tests for main package
-│   ├── test_aws/                      # AWS-specific tests
-│   ├── test_wizards/                  # Tests for initialization wizards
-│   ├── common_utils/                  # Shared test utilities
-│   └── shared/                        # Shared fixtures and helpers
+│   ├── test_aws/                          # AWS-specific tests
+│   ├── test_wizards/                      # Tests for initialization wizards
+│   └── shared/                            # Shared fixtures and helpers
 ├── .github/              # GitHub configuration and workflows
 ├── pyproject.toml        # Project configuration and dependencies
 ├── Dockerfile            # Container definition
-└── setup.py              # Unified setup script
+├── CONTRIBUTING.md       # Contributing guidelines
+├── README.md             # Project overview
+├── SETUP.md              # Setup instructions
+└── CONSOLIDATION_PLAN.md # Project consolidation documentation
 ```
 
 ## Documentation
@@ -64,6 +110,7 @@ reference-python-project/
 - [Contributing Guide](./CONTRIBUTING.md) - How to contribute to this project
 - [Project Architecture](./docs/architecture.md) - System design and patterns
 - [Development Guide](./docs/development.md) - Development environment and workflows
+- [Testing Guide](./docs/testing.md) - Testing strategies and guidelines
 - [Consolidation Plan](./CONSOLIDATION_PLAN.md) - Project consolidation and simplification
 
 ## License
