@@ -328,13 +328,13 @@ class TestDynamoDBOperations:
 class TestDynamoDBWithFixtures:
     """Test DynamoDB operations with pytest fixtures."""
 
-    @pytest.fixture()
+    @pytest.fixture
     def dynamodb_resource(self) -> Any:
         """Create a mocked DynamoDB resource."""
         with mock_aws():
             yield boto3.resource("dynamodb", region_name="us-east-1")
 
-    @pytest.fixture()
+    @pytest.fixture
     def products_table(self, dynamodb_resource: Any) -> Any:
         """Create a test products table."""
         table = dynamodb_resource.create_table(

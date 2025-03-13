@@ -158,7 +158,7 @@ def lambda_handler(event, context):
     Returns:
         Dict[str, Any]: Processing results
     """
-    print(f'Received {len(event["Records"])} records from Kinesis')
+    print(f"Received {len(event['Records'])} records from Kinesis")
 
     # Initialize AWS clients
     s3_client = boto3.client("s3")

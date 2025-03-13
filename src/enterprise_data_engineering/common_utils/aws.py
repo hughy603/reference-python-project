@@ -131,10 +131,7 @@ def create_secret(
     client = session.client(service_name="secretsmanager")
 
     # Convert dict to JSON string if necessary
-    if isinstance(secret_value, dict):
-        secret_string = json.dumps(secret_value)
-    else:
-        secret_string = secret_value
+    secret_string = json.dumps(secret_value) if isinstance(secret_value, dict) else secret_value
 
     try:
         kwargs = {
@@ -179,10 +176,7 @@ def update_secret(
     client = session.client(service_name="secretsmanager")
 
     # Convert dict to JSON string if necessary
-    if isinstance(secret_value, dict):
-        secret_string = json.dumps(secret_value)
-    else:
-        secret_string = secret_value
+    secret_string = json.dumps(secret_value) if isinstance(secret_value, dict) else secret_value
 
     try:
         response = client.update_secret(

@@ -1,6 +1,118 @@
-# Project Initialization Scripts
+# Project Scripts
 
-This directory contains scripts for setting up and initializing projects from the template.
+This directory contains utility scripts for setting up, managing, and working with the project.
+
+## Project Initialization
+
+### Interactive Wizard
+
+The interactive wizard provides a user-friendly interface for initializing new projects from the
+template.
+
+- `interactive_wizard.py` - Main implementation of the interactive wizard
+- `run_interactive_wizard.py` - Runner script that handles dependencies and launches the wizard
+
+Usage:
+
+```bash
+python scripts/run_interactive_wizard.py
+```
+
+![Wizard Screenshot](../docs/images/wizard_welcome.png)
+
+For detailed information, see the [Wizard Documentation](../docs/wizard.md).
+
+### Standard Initialization
+
+The standard initialization script provides command-line options for different initialization
+methods.
+
+- `init_project.py` - Main project initialization script with various modes
+- `template_processor.py` - Core logic for processing template components
+- `template_utils.py` - Utility functions for the template system
+
+Usage:
+
+```bash
+# Interactive mode
+python scripts/init_project.py
+
+# Quick start mode
+python scripts/init_project.py --quick
+
+# Configuration file mode
+python scripts/init_project.py --config my_config.yml
+
+# Preset mode
+python scripts/init_project.py --preset data_engineering
+```
+
+## Development Setup
+
+These scripts help set up the development environment for different platforms:
+
+- `setup.sh` - Basic setup script for Unix-based systems
+- `wsl_setup.sh` - Setup script for Windows Subsystem for Linux
+- `windows_setup.ps1` - Setup script for Windows
+- `non_admin_setup.ps1` - Windows setup script that doesn't require admin privileges
+- `setup_podman.ps1` - Script to set up Podman as an alternative to Docker on Windows
+- `unified_setup.py` - Cross-platform setup script that works on any OS
+
+## Documentation
+
+Scripts for managing project documentation:
+
+- `docs.sh` - Script to build and serve documentation
+- `generate_docs.sh` - Script to generate documentation from source code
+- `generate_api_docs.py` - Script to generate API documentation
+- `fix_documentation.py` - Script to fix common documentation issues
+- `find_obsolete_docs.py` - Script to identify outdated or obsolete documentation
+- `cleanup_docs.py` - Script to clean up documentation
+
+## Testing and Quality
+
+Scripts for testing and maintaining code quality:
+
+- `run_tox_tests.sh` - Script to run Tox tests on Unix-based systems
+- `run_tox_tests.ps1` - Script to run Tox tests on Windows
+- `run_optimized.ps1` - Script to run optimized Python code on Windows
+- `run_precommit.py` - Script to run pre-commit hooks manually
+- `setup_precommit.py` - Script to set up pre-commit hooks
+- `fix_precommit.py` - Script to fix common pre-commit hook issues
+- `project_health_dashboard.py` - Script to generate a dashboard of project health metrics
+
+## AWS and Terraform
+
+Scripts for working with AWS services and Terraform:
+
+- `run_glue_job_local.py` - Script to run AWS Glue jobs locally
+- `test_lambda_local.py` - Script to test AWS Lambda functions locally
+- `generate_terraform_docs.py` - Script to generate documentation for Terraform modules
+
+## Maintenance and Utilities
+
+Scripts for general project maintenance and utility tasks:
+
+- `cleanup_repository.py` - Script to clean up the repository
+- `delete_obsolete_files.py` - Script to identify and delete obsolete files
+- `diagnostics.py` - Script to run diagnostics on the project
+- `modernize_project.py` - Script to update the project to use modern practices
+- `optimize_py312.py` - Script to optimize code for Python 3.12
+- `setup_nexus.py` - Script to configure Nexus repository access
+- `tasks.py` - Invoke tasks for common operations
+- `update_vscode_settings.py` - Script to update VS Code settings
+
+## Windows Integration
+
+Scripts for improved Windows integration:
+
+- `open_in_vscode.bat` - Batch file to open the project in VS Code on Windows
+
+## Developer Onboarding
+
+Scripts to help new developers get started:
+
+- `onboard_developer.sh` - Script to set up the project for a new developer
 
 ## Key Scripts
 

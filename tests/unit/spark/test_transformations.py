@@ -32,7 +32,7 @@ def spark():
     )
 
 
-@pytest.mark.spark()
+@pytest.mark.spark
 class TestSparkTransformations:
     """Test suite for Spark transformation functions."""
 

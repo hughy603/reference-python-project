@@ -46,7 +46,7 @@ class LambdaContext:
         self.aws_request_id = f"local-{int(time.time() * 1000)}"
         self.log_group_name = f"/aws/lambda/{function_name}"
         self.log_stream_name = (
-            f'{datetime.now().strftime("%Y/%m/%d")}/[$LATEST]{self.aws_request_id}'
+            f"{datetime.now().strftime('%Y/%m/%d')}/[$LATEST]{self.aws_request_id}"
         )
         self.identity = None
         self.client_context = None

@@ -21,7 +21,7 @@ import yaml
 def run_command(command: list[str], verbose: bool = True) -> subprocess.CompletedProcess[str]:
     """Run a command and return its output."""
     if verbose:
-        print(f'Running: {" ".join(command)}')
+        print(f"Running: {' '.join(command)}")
 
     result = subprocess.run(command, capture_output=True, text=True, check=False)
 
@@ -209,7 +209,7 @@ def check_hook_configs():
                     problematic_hooks.append(hook.get("id", "unknown"))
 
     if problematic_hooks:
-        print(f'Found potentially problematic hooks: {", ".join(problematic_hooks)}')
+        print(f"Found potentially problematic hooks: {', '.join(problematic_hooks)}")
         print("You may want to remove these hooks or install the required tools")
     else:
         print("✓ No obvious configuration issues found")

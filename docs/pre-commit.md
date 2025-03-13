@@ -3,6 +3,11 @@
 This project uses [pre-commit](https://pre-commit.com/) to ensure code quality and consistency.
 Pre-commit runs hooks on your code before each commit, helping catch issues early.
 
+## Configuration
+
+The pre-commit hooks are configured in `.pre-commit-config.yaml`. Many of the tool-specific
+configurations (like ruff, mypy, etc.) are defined in the consolidated `pyproject.toml` file.
+
 ## Quick Start
 
 ```bash

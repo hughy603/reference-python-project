@@ -16,7 +16,7 @@ from rich import print as rprint
 from rich.console import Console
 from rich.table import Table
 
-from enterprise_data_engineering.cli import data
+from enterprise_data_engineering.cli import automation, data
 
 # Type variable for function return types
 F = TypeVar("F", bound=Callable[..., Any])
@@ -37,6 +37,9 @@ app.add_typer(docs_app, name="docs")
 
 # Add the data commands from the data module
 app.add_typer(data.app, name="data")
+
+# Add the automation commands for job scheduling systems
+app.add_typer(automation.app, name="automation")
 
 # Create console for rich output
 console = Console()

@@ -71,7 +71,7 @@ def run_script(script_path, script_args, optimization_level):
     cmd.append(script_path)
     cmd.extend(script_args)
 
-    print(f'Running: {" ".join(cmd)}')
+    print(f"Running: {' '.join(cmd)}")
     print(f"Optimization level: {optimization_level}")
 
     start_time = time.time()

@@ -35,7 +35,7 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
-from typing import Any, Optional, Union
+from typing import Any
 
 # Import utility functions early
 from template_utils import (
@@ -280,7 +280,7 @@ def parse_arguments() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def load_config_file(args_or_path: Union[str, Any]) -> dict[str, Any]:
+def load_config_file(args_or_path: str | Any) -> dict[str, Any]:
     """Load configuration from a YAML or JSON file.
 
     Args:
@@ -655,7 +655,7 @@ def update_metadata(config: dict[str, Any]) -> None:
         print_info("Updated project information in README.md")
 
 
-def rename_packages(project_root: Path, package_name: Optional[str] = None) -> None:
+def rename_packages(project_root: Path, package_name: str | None = None) -> None:
     """Rename the default package to the specified name.
 
     Args:
@@ -964,7 +964,7 @@ def setup_precommit_hooks() -> None:
         print_warning(f"Error setting up pre-commit hooks: {e}")
 
 
-def initialize_git(project_root: Path, config: Optional[dict[str, Any]] = None) -> None:
+def initialize_git(project_root: Path, config: dict[str, Any] | None = None) -> None:
     """Initialize a fresh Git repository.
 
     Args:

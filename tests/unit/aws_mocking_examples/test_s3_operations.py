@@ -200,13 +200,13 @@ class TestS3Operations:
 class TestS3WithFixtures:
     """Test S3 operations using pytest fixtures with Moto."""
 
-    @pytest.fixture()
+    @pytest.fixture
     def s3_client(self) -> Any:
         """Create a mocked S3 client."""
         with mock_aws():
             yield boto3.client("s3", region_name="us-east-1")
 
-    @pytest.fixture()
+    @pytest.fixture
     def test_bucket(self, s3_client: Any) -> str:
         """Create a test bucket for use in tests."""
         bucket_name = "fixture-test-bucket"

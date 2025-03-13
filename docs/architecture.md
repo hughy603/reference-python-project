@@ -1,81 +1,113 @@
-# Project Initialization System Architecture
+# Reference Python Project Architecture
 
-This document describes the architecture of the Project Initialization System.
+This document describes the architecture of the Reference Python Project template.
 
-## System Components
+## System Overview
 
 ```mermaid
 graph TD
-    User[User] --> CLI[Command Line Interface]
-    CLI --> ConfigLoader[Configuration Loader]
-    CLI --> ProjectInitializer[Project Initializer]
+    CLI[CLI Application] --> Core[Core Components]
+    Core --> DataPipelines[Data Pipelines]
+    Core --> Infrastructure[Infrastructure]
+    Core --> Utils[Utilities]
 
-    ConfigLoader --> |YAML Config| Parser[Config Parser]
-    ConfigLoader --> |JSON Config| Parser
+    DataPipelines --> AWS[AWS Integration]
+    Infrastructure --> Terraform[Terraform Modules]
+    Infrastructure --> CloudFormation[CloudFormation Templates]
 
-    ProjectInitializer --> TemplateProcessor[Template Processor]
-    ProjectInitializer --> PackageRenamer[Package Renamer]
-    ProjectInitializer --> GitInitializer[Git Initializer]
-    ProjectInitializer --> EnvSetup[Environment Setup]
-
-    TemplateProcessor --> |Read Templates| FileSystem[File System]
-    TemplateProcessor --> |Process Variables| VarSubstitution[Variable Substitution]
-
-    VarSubstitution --> |Write Files| FileSystem
-    PackageRenamer --> |Update Imports| FileSystem
-    GitInitializer --> |Initialize Repository| Git[Git]
-    EnvSetup --> |Create Virtual Env| VirtualEnv[Virtual Environment]
-
-    subgraph External Systems
-        Git
-        VirtualEnv
-        FileSystem
+    subgraph Development Tools
+        Testing[Testing Framework]
+        Documentation[Documentation System]
+        Linting[Code Quality Tools]
+        CI[Continuous Integration]
     end
+
+    Core --> Development Tools
 ```
 
-## Component Descriptions
+## Key Components
 
-### Command Line Interface (CLI)
+### Core Package Structure
 
-Handles user input, parses command-line arguments, and orchestrates the initialization process.
+The project is organized into modular packages with clear separation of concerns:
 
-### Configuration Loader
+1. **enterprise_data_engineering**: Main package containing enterprise-ready data engineering tools
 
-Loads and validates configuration from YAML or JSON files, merging with default values.
+   - **cli**: Command-line interface components
+   - **common_utils**: Shared utility functions
+   - **data_pipelines**: Data transformation and processing
+   - **spark**: Apache Spark integration utilities
+   - **compat**: Compatibility layer for different Python versions
 
-### Project Initializer
+1. **reference_python_project**: Reference implementation with examples
 
-Coordinates the overall project initialization process, delegating to specialized components.
+   - **cli**: Command-line tools and examples
+   - **utils**: Utility functions and helpers
 
-### Template Processor
+### Design Principles
 
-Processes template files, replacing variables with user-provided values.
+The template follows these architectural principles:
 
-### Package Renamer
+1. **Separation of Concerns**: Each module has a clear, single responsibility
+1. **Interface Stability**: Public APIs are designed for long-term stability
+1. **Dependency Inversion**: High-level modules don't depend on low-level modules
+1. **Composition Over Inheritance**: Prefer object composition to class inheritance
+1. **Configuration as Code**: All settings are managed in version-controlled files
 
-Renames Python packages and updates import statements throughout the codebase.
+## Development Workflow
 
-### Git Initializer
+```mermaid
+flowchart LR
+    Dev[Developer] --> Code[Write Code]
+    Code --> Lint[Lint & Format]
+    Lint --> Test[Run Tests]
+    Test --> Doc[Update Docs]
+    Doc --> PR[Create PR]
+    PR --> CI[CI Verification]
+    CI --> Review[Code Review]
+    Review --> Merge[Merge]
+```
 
-Sets up a Git repository, creates an initial commit, and configures Git settings.
+The template enforces a consistent development workflow:
 
-### Environment Setup
+1. **Local Development**: Write code with VS Code integration
+1. **Pre-commit Hooks**: Automatically format and lint code
+1. **Testing**: Run tests with pytest and coverage reporting
+1. **Documentation**: Update documentation with code changes
+1. **CI/CD**: Automated verification through GitHub Actions
 
-Creates and configures a Python virtual environment for the project.
+## Infrastructure Integration
 
-## Data Flow
+The template provides infrastructure components for cloud deployment:
 
-1. User provides configuration via command-line arguments or configuration files
-1. Configuration is loaded, validated, and merged with defaults
-1. Template files are processed, with variables replaced by configuration values
-1. Python packages are renamed according to the configuration
-1. A Git repository is initialized (unless skipped)
-1. A virtual environment is created and configured (unless skipped)
+1. **Terraform Modules**: Reusable modules for AWS infrastructure
+1. **CloudFormation Templates**: AWS resource definitions
+1. **Docker Support**: Containerization for consistent environments
+1. **CI/CD Workflows**: GitHub Actions for deployment pipelines
 
 ## Extension Points
 
 The system is designed to be extensible in the following ways:
 
-1. **Custom Templates**: Users can create their own project templates
-1. **Configuration Presets**: Common configurations can be saved as presets
-1. **Plugin System**: Future versions may support plugins for custom initialization steps
+1. **Custom Modules**: Add new functionality by creating additional packages
+1. **Infrastructure Expansion**: Add templates for additional cloud providers
+1. **Pipeline Components**: Create new data pipeline processing elements
+1. **CLI Commands**: Extend the CLI with new commands
+
+## Security Design
+
+Security is embedded throughout the architecture:
+
+1. **Dependency Scanning**: Automatic vulnerability scanning
+1. **Secret Management**: Secure handling of credentials
+1. **Least Privilege**: IAM policies following least-privilege principle
+1. **Code Scanning**: Static analysis for security issues
+
+## Future Direction
+
+The architecture supports planned enhancements:
+
+1. **Multi-cloud Support**: Expand infrastructure beyond AWS
+1. **Data Mesh Patterns**: Support for domain-oriented data architectures
+1. **ML Operations**: Machine learning deployment pipelines
+1. **Compliance Automation**: Built-in compliance checks and documentation

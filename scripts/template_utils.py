@@ -13,7 +13,7 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
-from typing import Any, Optional, Union
+from typing import Any
 
 # Detect platform
 PLATFORM = platform.system()
@@ -150,7 +150,7 @@ def camel_case(text: str) -> str:
     return words[0] + "".join(word.capitalize() for word in words[1:])
 
 
-def prompt_for_value(prompt: str, default: Optional[str] = None) -> str:
+def prompt_for_value(prompt: str, default: str | None = None) -> str:
     """
     Prompt the user for a value with optional default.
 
@@ -338,9 +338,7 @@ def setup_venv(project_root: Path, verbose: bool = False) -> Path:
         sys.exit(1)
 
 
-def run_command(
-    cmd: list[str], cwd: Union[str, Path] = None, capture_output: bool = False
-) -> Optional[str]:
+def run_command(cmd: list[str], cwd: str | Path = None, capture_output: bool = False) -> str | None:
     """Run a command and return its output.
 
     Args:
@@ -380,7 +378,7 @@ def run_command(
         raise
 
 
-def ensure_directory(path: Union[str, Path]) -> Path:
+def ensure_directory(path: str | Path) -> Path:
     """Ensure a directory exists.
 
     Args:
@@ -395,7 +393,7 @@ def ensure_directory(path: Union[str, Path]) -> Path:
     return path_obj
 
 
-def remove_directory(path: Union[str, Path]) -> None:
+def remove_directory(path: str | Path) -> None:
     """Remove a directory and its contents.
 
     Args:
@@ -406,9 +404,7 @@ def remove_directory(path: Union[str, Path]) -> None:
         shutil.rmtree(path_obj)
 
 
-def copy_directory(
-    src: Union[str, Path], dst: Union[str, Path], ignore_patterns: list[str] = None
-) -> None:
+def copy_directory(src: str | Path, dst: str | Path, ignore_patterns: list[str] = None) -> None:
     """Copy a directory and its contents.
 
     Args:
@@ -441,7 +437,7 @@ def copy_directory(
     shutil.copytree(src_path, dst_path, dirs_exist_ok=True, ignore=ignore_func)
 
 
-def find_files(path: Union[str, Path], pattern: str) -> list[Path]:
+def find_files(path: str | Path, pattern: str) -> list[Path]:
     """Find files matching a pattern.
 
     Args:
@@ -455,7 +451,7 @@ def find_files(path: Union[str, Path], pattern: str) -> list[Path]:
     return list(path_obj.glob(pattern))
 
 
-def replace_in_file(file_path: Union[str, Path], pattern: str, replacement: str) -> bool:
+def replace_in_file(file_path: str | Path, pattern: str, replacement: str) -> bool:
     """Replace text in a file.
 
     Args:
@@ -480,7 +476,7 @@ def replace_in_file(file_path: Union[str, Path], pattern: str, replacement: str)
     return False
 
 
-def create_virtual_environment(venv_path: Union[str, Path] = ".venv") -> bool:
+def create_virtual_environment(venv_path: str | Path = ".venv") -> bool:
     """Create a Python virtual environment.
 
     Args:
@@ -503,7 +499,7 @@ def create_virtual_environment(venv_path: Union[str, Path] = ".venv") -> bool:
         return False
 
 
-def install_package(package_name: str, venv_path: Union[str, Path] = ".venv") -> bool:
+def install_package(package_name: str, venv_path: str | Path = ".venv") -> bool:
     """Install a package in a virtual environment.
 
     Args:
@@ -529,7 +525,7 @@ def install_package(package_name: str, venv_path: Union[str, Path] = ".venv") ->
         return False
 
 
-def install_project_in_dev_mode(venv_path: Union[str, Path] = ".venv") -> bool:
+def install_project_in_dev_mode(venv_path: str | Path = ".venv") -> bool:
     """Install the project in development mode.
 
     Args:

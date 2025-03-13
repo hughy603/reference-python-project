@@ -98,9 +98,8 @@ extra:
 nav:
   - Home: index.md
   - Getting Started:
-      - Installation: getting-started/installation.md
+      - Setup: getting-started/setup.md
       - Configuration: getting-started/configuration.md
-      - Quick Start: getting-started/quick-start.md
   - User Guide:
       - Package Structure: user-guide/package-structure.md
       - CLI Usage: user-guide/cli-usage.md
@@ -118,7 +117,6 @@ nav:
       - Documentation: development/documentation.md
       - Pre-commit: pre-commit.md
       - Automation: automation.md
-      - VS Code Integration: vscode_integration.md
+      - Development Environment: development.md
   - API Reference:
       - Enterprise Data Engineering: api/enterprise_data_engineering.md
-      - Reference Python Project: api/reference_python_project.md

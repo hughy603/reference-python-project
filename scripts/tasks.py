@@ -69,7 +69,7 @@ def run_command(
     cmd: list[str] | str, shell: bool = False, check: bool = True
 ) -> subprocess.CompletedProcess[str] | None:
     """Run a command and handle errors."""
-    print(f'{YELLOW}Running: {" ".join(cmd) if isinstance(cmd, list) else cmd}{NC}')
+    print(f"{YELLOW}Running: {' '.join(cmd) if isinstance(cmd, list) else cmd}{NC}")
 
     try:
         result = subprocess.run(cmd, shell=shell, check=check, cwd=PROJECT_ROOT, text=True)

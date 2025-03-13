@@ -326,11 +326,11 @@ class TestIntegrationWithLocalstack:
 #################################################
 
 
-@pytest.mark.snapshot()
+@pytest.mark.snapshot
 class TestInfrastructureSnapshots:
     """Example of snapshot testing for infrastructure configurations."""
 
-    @pytest.fixture()
+    @pytest.fixture
     def cloudformation_template(self):
         """Load a CloudFormation template for testing."""
         template_path = os.path.join(

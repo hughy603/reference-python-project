@@ -34,9 +34,9 @@ NC = "\033[0m"  # No Color
 
 def print_section(title: str) -> None:
     """Print a section header."""
-    print(f'\n{BOLD}{"=" * 40}{NC}')
+    print(f"\n{BOLD}{'=' * 40}{NC}")
     print(f"{BOLD}{title}{NC}")
-    print(f'{BOLD}{"=" * 40}{NC}\n')
+    print(f"{BOLD}{'=' * 40}{NC}\n")
 
 
 def run_command(cmd: list[str], ignore_errors: bool = False) -> str:
@@ -57,7 +57,7 @@ def get_system_info() -> None:
     """Get basic system information."""
     print_section("System Information")
 
-    print(f'Date and Time: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
+    print(f"Date and Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print(f"Platform: {platform.platform()}")
     print(f"Python Version: {platform.python_version()}")
     print(f"Python Path: {sys.executable}")
@@ -315,7 +315,7 @@ def main() -> None:
     args = parser.parse_args()
 
     print(f"{BOLD}Enterprise Data Engineering Diagnostics{NC}")
-    print(f'Running diagnostics at {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
+    print(f"Running diagnostics at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
     if args.json:
         export_as_json(include_sensitive=args.full)

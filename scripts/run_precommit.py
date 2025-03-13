@@ -17,7 +17,7 @@ import sys
 
 def run_command(command: list[str], env: dict[str, str] | None = None) -> int:
     """Run a command and return its exit code."""
-    print(f'Running: {" ".join(command)}')
+    print(f"Running: {' '.join(command)}")
 
     # Merge environment variables
     cmd_env = os.environ.copy()

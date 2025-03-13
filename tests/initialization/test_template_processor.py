@@ -21,7 +21,7 @@ sys.path.append(str(Path(__file__).parent.parent.parent / "scripts"))
 from template_processor import TemplateProcessor
 
 
-@pytest.fixture()
+@pytest.fixture
 def sample_manifest():
     """Create a sample manifest dictionary for testing."""
     return {
@@ -76,7 +76,7 @@ def sample_manifest():
     }
 
 
-@pytest.fixture()
+@pytest.fixture
 def temp_manifest_file(sample_manifest):
     """Create a temporary manifest file for testing."""
     with tempfile.NamedTemporaryFile(mode="w", suffix=".yml", delete=False) as temp_file:
@@ -90,7 +90,7 @@ def temp_manifest_file(sample_manifest):
         os.unlink(temp_path)
 
 
-@pytest.fixture()
+@pytest.fixture
 def mock_project_structure():
     """Create a mock project structure for testing."""
     with tempfile.TemporaryDirectory() as temp_dir:

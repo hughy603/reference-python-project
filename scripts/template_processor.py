@@ -41,7 +41,7 @@ import os
 import re
 import shutil
 from pathlib import Path
-from typing import Any, Optional, Union
+from typing import Any
 
 try:
     import yaml
@@ -67,7 +67,7 @@ class TemplateProcessor:
         enabled_components (list): List of enabled component names
     """
 
-    def __init__(self, manifest_path: Union[str, Path], verbose: bool = False):
+    def __init__(self, manifest_path: str | Path, verbose: bool = False):
         """Initialize the template processor with the manifest file.
 
         Args:
@@ -163,7 +163,7 @@ class TemplateProcessor:
                 print(f"Error processing template: {e}")
             return False
 
-    def get_component_by_name(self, name: str) -> Optional[dict[str, Any]]:
+    def get_component_by_name(self, name: str) -> dict[str, Any] | None:
         """Get a component from the manifest by name.
 
         Args:
@@ -339,7 +339,7 @@ class TemplateProcessor:
                 if self.verbose:
                     print(f"Error removing {file_path}: {e}")
 
-    def generate_dependency_graph(self, output_file: Optional[str] = None) -> str:
+    def generate_dependency_graph(self, output_file: str | None = None) -> str:
         """Generate a dependency graph of components.
 
         Args:
@@ -436,7 +436,7 @@ class TemplateProcessor:
 
         return graph
 
-    def get_component_info(self, component_name: str) -> Optional[dict[str, Any]]:
+    def get_component_info(self, component_name: str) -> dict[str, Any] | None:
         """Get information about a specific component.
 
         Retrieves the full definition of a component from the manifest.

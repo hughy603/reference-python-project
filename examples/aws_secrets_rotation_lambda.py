@@ -150,7 +150,7 @@ def set_secret(service_client: Any, arn: str, token: str) -> None:
                 )
                 conn.commit()
 
-        logger.info(f'Updated password in database for user {current_secret["username"]}')
+        logger.info(f"Updated password in database for user {current_secret['username']}")
 
     except (ClientError, pymysql.Error) as e:
         logger.error(f"Error setting secret in database: {e!s}")
@@ -184,7 +184,7 @@ def test_secret(service_client: Any, arn: str, token: str) -> None:
                 if result[0] != 1:
                     raise ValueError("Test query failed")
 
-        logger.info(f'Successfully tested new credentials for {pending_secret["username"]}')
+        logger.info(f"Successfully tested new credentials for {pending_secret['username']}")
 
     except (ClientError, pymysql.Error) as e:
         logger.error(f"Error testing secret: {e!s}")

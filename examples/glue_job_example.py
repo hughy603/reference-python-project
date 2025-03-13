@@ -31,9 +31,9 @@ job = Job(glueContext)
 job.init(args["JOB_NAME"], args)
 
 # Log configuration
-print(f'Starting job: {args["JOB_NAME"]}')
-print(f'Input path: {args["input_path"]}')
-print(f'Output path: {args["output_path"]}')
+print(f"Starting job: {args['JOB_NAME']}")
+print(f"Input path: {args['input_path']}")
+print(f"Output path: {args['output_path']}")
 
 # For local testing with mock S3, create sample data
 if "IS_LOCAL" in os.environ:

@@ -1,124 +1,70 @@
-# Project Initialization System
+# Reference Python Project
 
-![Project Initialization Banner](docs/images/project_init_banner.svg)
+A robust template for enterprise-ready Python projects with best practices built-in.
 
-A robust system for creating enterprise-ready Python and Terraform projects with best practices
-built-in.
+## Overview
 
-## Features
+This project template provides a standardized structure and toolset for creating professional-grade
+Python applications, with particular focus on data engineering workflows. It incorporates industry
+best practices for development, testing, and deployment.
 
-- **Template-based project creation**: Generate new projects from customizable templates
-- **Configuration-driven**: Use YAML or JSON configuration files to define project settings
-- **Variable substitution**: Replace template variables with your project-specific values
-- **Package renaming**: Automatically rename packages and update imports
-- **Git initialization**: Set up Git repositories with initial commits
-- **Virtual environment setup**: Create and configure Python virtual environments
-- **Cross-platform support**: Works on Windows, macOS, and Linux
+## Key Features
 
-## Installation
+- ✅ **Modern Python Structure**: Optimized package layout using latest Python features
+- ✅ **Consolidated Configuration**: Single source of truth in pyproject.toml
+- ✅ **Developer Experience**: Comprehensive VS Code integration and pre-commit hooks
+- ✅ **Testing Framework**: Ready-to-use pytest configuration with coverage reports
+- ✅ **Quality Controls**: Static analysis with ruff, mypy, and bandit
+- ✅ **Documentation**: MkDocs with Material theme for beautiful documentation
+- ✅ **CI/CD Integration**: GitHub Actions workflows for testing and deployment
+- ✅ **Infrastructure**: Templates for AWS resources and Terraform configurations
+- ✅ **Enterprise Ready**: Security scanning, dependency management, and compliance
 
-Clone this repository and install the required dependencies:
+## Getting Started
 
-```bash
-git clone https://github.com/yourusername/project-initialization-system.git
-cd project-initialization-system
-pip install -r requirements.txt
-```
+See the [Setup Guide](./SETUP.md) for comprehensive instructions on installing and using this
+template.
 
-## Usage
-
-### Basic Usage
-
-To initialize a new project with interactive prompts:
+Quick start:
 
 ```bash
-python scripts/init_project.py
+# Clone the repository
+git clone https://github.com/yourusername/reference-python-project.git my-project
+cd my-project
+
+# Run the setup script
+python setup.py
 ```
 
-### Using Configuration Files
-
-You can provide a configuration file in YAML or JSON format:
-
-```bash
-python scripts/init_project.py --config my_config.yml
-```
-
-Example configuration file (`my_config.yml`):
-
-```yaml
-project_name: my-awesome-project
-package_name: my_awesome_project
-description: A description of my awesome project
-author: Your Name
-email: your.email@example.com
-version: 0.1.0
-```
-
-### Command-line Options
+## Project Structure
 
 ```
-usage: init_project.py [-h] [--config CONFIG] [--verbose] [--skip-env] [--keep-git] [--manifest MANIFEST]
-
-Initialize a new project from the template.
-
-options:
-  -h, --help            show this help message and exit
-  --config CONFIG, -c CONFIG
-                        Path to a configuration file (YAML or JSON)
-  --verbose, -v         Enable verbose output
-  --skip-env, -s        Skip virtual environment setup
-  --keep-git, -k        Keep existing Git repository
-  --manifest MANIFEST, -m MANIFEST
-                        Path to template manifest file
+reference-python-project/
+├── docs/                 # Documentation files
+├── infrastructure/       # Infrastructure as code (Terraform, CloudFormation)
+├── scripts/              # Utility scripts for project management
+├── src/                  # Source code
+│   ├── enterprise_data_engineering/  # Main package
+│   └── reference_python_project/     # Reference implementation
+├── tests/                # Test suite
+│   ├── test_enterprise_data_engineering/  # Tests for main package
+│   ├── test_aws/                      # AWS-specific tests
+│   ├── test_wizards/                  # Tests for initialization wizards
+│   ├── common_utils/                  # Shared test utilities
+│   └── shared/                        # Shared fixtures and helpers
+├── .github/              # GitHub configuration and workflows
+├── pyproject.toml        # Project configuration and dependencies
+├── Dockerfile            # Container definition
+└── setup.py              # Unified setup script
 ```
 
-## Creating Custom Templates
+## Documentation
 
-You can create your own project templates by:
-
-1. Creating a directory structure with your template files
-1. Adding template variables using `{{variable_name}}` syntax
-1. Creating a `template_manifest.yml` file to define the template structure
-
-Example manifest file:
-
-```yaml
-name: Python Web Application
-description: A template for Python web applications
-variables:
-  - name: project_name
-    description: Name of the project
-    default: my-web-app
-  - name: package_name
-    description: Name of the Python package
-    default: my_web_app
-  - name: description
-    description: Project description
-    default: A Python web application
-files:
-  - source: templates/pyproject.toml
-    destination: pyproject.toml
-  - source: templates/README.md
-    destination: README.md
-  - source: templates/src
-    destination: src/{{package_name}}
-```
-
-## Development
-
-### Running Tests
-
-```bash
-pytest
-```
-
-### Contributing
-
-1. Fork the repository
-1. Create a feature branch: `git checkout -b feature/your-feature-name`
-1. Commit your changes: `git commit -am 'Add some feature'`
-1. Push to the branch: `git push origin feature/your-feature-name`
-1. Submit a pull request
+- [Setup Guide](./SETUP.md) - Installation and configuration
+- [Contributing Guide](./CONTRIBUTING.md) - How to contribute to this project
+- [Project Architecture](./docs/architecture.md) - System design and patterns
+- [Development Guide](./docs/development.md) - Development environment and workflows
+- [Consolidation Plan](./CONSOLIDATION_PLAN.md) - Project consolidation and simplification
 
 ## License
 

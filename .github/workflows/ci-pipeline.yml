@@ -1,19 +1,15 @@
-name: CI Pipeline
+name: Consolidated CI/CD Pipeline
 
 on:
   push:
-    branches: [main, dev]
+    branches: [main]
   pull_request:
-    branches: [main, dev]
+    branches: [main]
   workflow_dispatch:
 
-env:
-  PYTHON_VERSION: '3.12'
-  HATCH_VERSION: '1.9.0'
-
 jobs:
-  code-quality:
-    name: Code Quality Checks
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -21,25 +17,20 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: ${{ env.PYTHON_VERSION }}
-          cache: 'pip'
+          python-version: "3.12"
+          cache: pip
 
-      - name: Install dependencies
+      - name: Install pre-commit
         run: |
           python -m pip install --upgrade pip
-          pip install hatch==${{ env.HATCH_VERSION }}
+          python -m pip install pre-commit
 
-      - name: Run linting
-        run: hatch run lint:style
+      - name: Run pre-commit hooks
+        run: |
+          pre-commit run --all-files
 
-      - name: Run type checking
-        run: hatch run lint:type
-
-      - name: Check formatting
-        run: hatch run ruff format --check .
-
-  security:
-    name: Security Checks
+  type-check:
+    name: Type Check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -47,30 +38,48 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: ${{ env.PYTHON_VERSION }}
-          cache: 'pip'
+          python-version: "3.12"
+          cache: pip
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install hatch==${{ env.HATCH_VERSION }} pip-audit bandit
+          python -m pip install hatch
+          hatch env create
 
-      - name: Check for vulnerable dependencies
-        run: pip-audit
-
-      - name: Run security scanning
+      - name: Run type checkers
         run: |
+          hatch run lint:type
+
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Run dependency security scan
+        run: |
+          python -m pip install --upgrade pip pip-audit
+          pip-audit
+
+      - name: Run bandit security scan
+        run: |
+          python -m pip install bandit
           bandit -r src/ -c pyproject.toml
 
-  tests:
-    name: Tests
+  test:
+    name: Test Python ${{ matrix.python-version }}
     runs-on: ubuntu-latest
-    needs: [code-quality]
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.10', '3.12']
-
+        python-version: ["3.11", "3.12", "3.13"]
     steps:
       - uses: actions/checkout@v4
 
@@ -78,84 +87,89 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-          cache: 'pip'
+          cache: pip
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install hatch==${{ env.HATCH_VERSION }}
+          python -m pip install hatch
+          hatch env create
 
-      - name: Run tests
-        run: hatch run test:cov
+      - name: Run tests with coverage
+        run: |
+          hatch run test:cov
 
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v3
+      - name: Upload coverage artifacts
+        uses: actions/upload-artifact@v4
         with:
-          file: ./coverage.xml
-          fail_ci_if_error: false
+          name: coverage-${{ matrix.python-version }}
+          path: |
+            coverage.xml
+            .coverage
+          retention-days: 7
 
-  infrastructure:
-    name: Infrastructure Validation
+  coverage-report:
+    name: Coverage Report
     runs-on: ubuntu-latest
+    needs: test
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Terraform
-        uses: hashicorp/setup-terraform@v3
+      - name: Download coverage results
+        uses: actions/download-artifact@v4
         with:
-          terraform_version: 1.5.7
-          terraform_wrapper: false
+          name: coverage-3.12
+          path: .
 
-      - name: Set up TFLint
-        uses: terraform-linters/setup-tflint@v3
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          tflint_version: v0.47.0
+          python-version: "3.12"
+          cache: pip
 
-      - name: Init TFLint
-        if: hashFiles('infrastructure/terraform/**/*.tf') != ''
+      - name: Generate coverage report
         run: |
-          cd infrastructure/terraform
-          tflint --init
+          python -m pip install coverage
+          coverage html
+          coverage report
 
-      - name: Run TFLint
-        if: hashFiles('infrastructure/terraform/**/*.tf') != ''
-        run: |
-          cd infrastructure/terraform
-          tflint -f compact
+      - name: Upload HTML coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-html
+          path: htmlcov/
+          retention-days: 7
 
-      - name: Terraform Format Check
-        if: hashFiles('infrastructure/terraform/**/*.tf') != ''
-        run: |
-          cd infrastructure/terraform
-          terraform fmt -check -recursive
-
-      - name: Terraform Validate
-        if: hashFiles('infrastructure/terraform/**/*.tf') != ''
-        run: |
-          cd infrastructure/terraform
-          terraform init -backend=false
-          terraform validate
-
-  build-container:
-    name: Build Container
+  build:
+    name: Build Package
     runs-on: ubuntu-latest
-    needs: [tests, security]
+    needs: [lint, test, type-check, security-scan]
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build image
-        uses: docker/build-push-action@v5
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          context: .
-          push: false
-          tags: enterprise-data-engineering:test
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          python-version: "3.12"
+          cache: pip
 
-  build-docs:
+      - name: Install build dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install hatch
+
+      - name: Build package
+        run: |
+          hatch build
+
+      - name: Upload package artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 7
+
+  docs:
     name: Build Documentation
     runs-on: ubuntu-latest
     steps:
@@ -164,25 +178,72 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: ${{ env.PYTHON_VERSION }}
-          cache: 'pip'
+          python-version: "3.12"
+          cache: pip
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install hatch==${{ env.HATCH_VERSION }}
-
-      - name: Generate documentation
-        run: |
-          hatch -e docs run generate
+          python -m pip install hatch
 
       - name: Build documentation
         run: |
-          hatch -e docs run build
+          hatch run docs:build
 
       - name: Upload documentation artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: documentation
+          name: docs-site
           path: site/
           retention-days: 7
+
+      - name: Deploy documentation
+        if: github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./site
+          force_orphan: true
+
+  deploy:
+    name: Deploy Package
+    runs-on: ubuntu-latest
+    needs: [build]
+    if: github.ref == 'refs/heads/main'
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download package artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install twine
+
+      - name: Publish to PyPI
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+        run: |
+          twine upload dist/*
+
+      - name: Publish to Nexus (Enterprise)
+        env:
+          NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
+          NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
+          NEXUS_URL: ${{ secrets.NEXUS_URL }}
+        run: |
+          python -m pip install twine requests
+          twine upload --repository-url ${NEXUS_URL} dist/*

@@ -196,7 +196,7 @@ class TestDataLakeProcessor:
 class TestWithFixtures:
     """Test with fixtures to create and tear down resources."""
 
-    @pytest.fixture()
+    @pytest.fixture
     def aws_clients(self) -> Any:
         """Set up AWS clients for testing."""
         with mock_aws():

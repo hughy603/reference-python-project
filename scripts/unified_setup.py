@@ -89,7 +89,7 @@ def detect_environment() -> dict[str, Any]:
     }
 
     # Check Python version
-    print(f'Python version: {env_info["python_version"]}')
+    print(f"Python version: {env_info['python_version']}")
 
     # Check for admin rights on Windows
     if IS_WINDOWS:
@@ -154,7 +154,7 @@ def setup_windows(no_admin: bool = False, quick: bool = False) -> bool:
         if args:
             cmd.extend(args)
 
-        print(f'Running: {" ".join(cmd)}')
+        print(f"Running: {' '.join(cmd)}")
         subprocess.run(cmd, check=True)
         print_status("Windows setup completed")
         return True
@@ -182,7 +182,7 @@ def setup_wsl(quick: bool = False) -> bool:
         cmd.append("--quick")
 
     try:
-        print(f'Running: {" ".join(cmd)}')
+        print(f"Running: {' '.join(cmd)}")
         subprocess.run(cmd, check=True)
         print_status("WSL setup completed")
         return True
@@ -210,7 +210,7 @@ def setup_unix(quick: bool = False) -> bool:
         cmd.append("--quick")
 
     try:
-        print(f'Running: {" ".join(cmd)}')
+        print(f"Running: {' '.join(cmd)}")
         subprocess.run(cmd, check=True)
         print_status("Unix setup completed")
         return True

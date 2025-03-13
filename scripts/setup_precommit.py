@@ -34,9 +34,9 @@ PROJECT_ROOT = Path(__file__).parent.parent
 
 def print_header(message):
     """Print a formatted header message."""
-    print(f'\n{BLUE}{BOLD}{"=" * 70}{NC}')
+    print(f"\n{BLUE}{BOLD}{'=' * 70}{NC}")
     print(f"{BLUE}{BOLD}  {message}{NC}")
-    print(f'{BLUE}{BOLD}{"=" * 70}{NC}\n')
+    print(f"{BLUE}{BOLD}{'=' * 70}{NC}\n")
 
 
 def print_success(message):
@@ -117,7 +117,7 @@ def install_hooks():
         return True
     else:
         print_error("Failed to install pre-commit hooks")
-        print(f'Error: {result.stderr if hasattr(result, "stderr") else "Unknown error"}')
+        print(f"Error: {result.stderr if hasattr(result, 'stderr') else 'Unknown error'}")
         return False
 
 

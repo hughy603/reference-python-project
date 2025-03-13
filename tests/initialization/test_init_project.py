@@ -20,7 +20,7 @@ sys.path.append(str(Path(__file__).parent.parent.parent / "scripts"))
 import init_project
 
 
-@pytest.fixture()
+@pytest.fixture
 def temp_config_file():
     """Create a temporary configuration file for testing."""
     config = {
