@@ -4,7 +4,7 @@ repos:
     rev: v5.0.0
     hooks:
       - id: check-yaml
-        exclude: ^(infrastructure/terraform/.+\.yml|infrastructure/cloudformation/.+\.(yaml|yml)|examples/lambda_functions/serverless\.yml)$
+        exclude: ^(mkdocs\.yml|infrastructure/terraform/.+\.yml|infrastructure/cloudformation/.+\.(yaml|yml)|examples/lambda_functions/serverless\.yml)$
       - id: check-json
         exclude: ^\.vscode/(glue-settings|simple-settings)\.json$
       - id: check-toml
